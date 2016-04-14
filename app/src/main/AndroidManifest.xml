@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.sasi.giffgaffplay"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <application
+        android:name=".ThisApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ScrollingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".NavigationDrawer"
+            android:label="@string/title_activity_navigation_drawer"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".TabbedActivity"
+            android:label="@string/title_activity_tabbed"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".TabWithImages"
+            android:label="@string/title_activity_tab_with_images"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".TabWithImages2"
+            android:label="@string/title_activity_tab_with_images"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".NavigationTabActivity"
+            android:label="@string/title_activity_navigation_tab"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".TestCarrier">
+        </activity>
+        <activity
+            android:name=".TextViewAnimator"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_text_view_animator"
+            android:theme="@style/FullscreenTheme">
+        </activity>
+        <activity
+            android:name=".ToggleButtonCustom"
+            android:label="@string/title_activity_toggle_button_custom"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".KeystoreActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".TextViewPlay">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".ggblogs.HTMLTextActivity">
+        </activity>
+
+        <provider
+            android:name=".data.BlogContentProvider"
+            android:authorities="com.sasi.giffgaffplay"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
+
+        <activity android:name=".ggblogs.BlogsActivity">
+        </activity>
+        <activity android:name=".ggblogs.BlogsItemActivity">
+        </activity>
+    </application>
+
+</manifest>

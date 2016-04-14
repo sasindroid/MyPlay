@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#ffa800</color>
+    <color name="green_material">#009688</color>
+    <color name="black">#000000</color>
+    <color name="orange">#ffa800</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="black_overlay">#66000000</color>
+
+
+    <!--Blogs label color-->
+    <color name="blog_label_default">#00796B</color>
+    <color name="blog_label_mobile_news">#f1722f</color>
+    <color name="blog_label_giffgaff_news">#83bf39</color>
+    <color name="blog_label_phone_reviews">#fecc2b</color>
+    <color name="blog_label_app_reviews">#f578a0</color>
+    <color name="blog_label_just_for_fun">#2fbdd3</color>
+    <color name="blog_label_phone_unlocking">#4064d6</color>
+
+</resources>

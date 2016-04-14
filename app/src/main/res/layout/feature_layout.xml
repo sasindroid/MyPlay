@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sasi.giffgaffplay.SquareRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <!--android:clickable="true"-->
+    <!--android:background="@drawable/myround">-->
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/account_tap"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:text="New Text"
+        android:textColor="#009688"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+</com.sasi.giffgaffplay.SquareRelativeLayout>

@@ -1,0 +1,151 @@
+<LinearLayout android:id="@+id/ll_parent_card_view"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#E0E0E0"
+              android:paddingBottom="5dp"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:paddingTop="5dp"
+    >
+    <!-- A CardView that contains a TextView -->
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        card_view:cardBackgroundColor="#FFFFFF"
+        >
+        <!--card_view:cardCornerRadius="4dp"-->
+
+        <RelativeLayout
+            android:id="@+id/rl_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/ll_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/vBorderTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@color/blog_label_default"/>
+
+                <TextView
+                    android:id="@+id/tv_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@color/blog_label_default"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp"
+                    tools:text="APP REVIEWS"/>
+
+                <TextView
+                    android:id="@+id/tv_subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="The Latest Apps and Games - March 2016"
+                    />
+
+                <!--<WebView-->
+                    <!--android:id="@+id/wv_teaser"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:visibility="gone"></WebView>-->
+
+                <TextView
+                    android:id="@+id/tv_teaser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:textSize="14sp"
+                    android:visibility="visible"
+                    tools:text="We felt a bit of warmth in March and the clocks went forward. We were reminded plenty of times that the summar is slowly creeping upon us and honestly this year I cannot wait for it!"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/vLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/ll_card_view"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#E0E0E0"/>
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vLine"
+                android:layout_margin="10dp"
+                card_view:columnCount="2"
+                >
+
+                <TextView
+                    android:id="@+id/tv_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="left|center"
+                    android:padding="3dp"
+                    android:textSize="12sp"
+                    card_view:layout_columnWeight="1"
+                    card_view:layout_gravity="fill_horizontal"
+                    tools:text="zerodudex333"/>
+
+                <TextView
+                    android:id="@+id/tv_kudos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:textSize="12sp"
+                    card_view:layout_columnWeight="1"
+                    card_view:layout_gravity="fill_horizontal"
+                    tools:text="13 Kudos"/>
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:textSize="12sp"
+                    card_view:layout_columnWeight="1"
+                    card_view:layout_gravity="fill_horizontal"
+                    tools:text="04/04/2016 12:21"/>
+
+                <TextView
+                    android:id="@+id/tv_views"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="3dp"
+                    android:textSize="12sp"
+                    card_view:layout_columnWeight="1"
+                    card_view:layout_gravity="fill_horizontal"
+                    tools:text="200 Views"/>
+
+
+            </android.support.v7.widget.GridLayout>
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
