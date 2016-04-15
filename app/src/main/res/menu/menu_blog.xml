@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/blog_refresh"
+        android:orderInCategory="100"
+        android:title="Refresh"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/blog_color"
+          android:title="Bg color mode"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
+    <item android:id="@+id/blog_nocolor"
+          android:title="Bg normal mode"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
+    <item android:id="@+id/blog_noavatar"
+          android:title="No Avatar"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
+    <item android:id="@+id/blog_avatar"
+          android:title="Avatar"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+</menu>

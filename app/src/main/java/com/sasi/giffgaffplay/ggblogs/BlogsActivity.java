@@ -2,9 +2,12 @@ package com.sasi.giffgaffplay.ggblogs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -12,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CursorAdapter;
 import android.widget.Toast;
@@ -19,7 +24,7 @@ import android.widget.Toast;
 import com.sasi.giffgaffplay.R;
 import com.sasi.giffgaffplay.data.BlogContract;
 
-public class BlogsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BlogsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "BlogsActivity";
     RecyclerView rv_blogs;
@@ -143,5 +148,97 @@ public class BlogsActivity extends AppCompatActivity implements LoaderManager.Lo
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mBlogsCursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_blog, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.blog_refresh:
+                setMyBoolVal("BLOG_REFRESH", true, this);
+                return true;
+
+            case R.id.blog_color:
+                setMyBoolVal("BLOG_COLOR_MODE", true, this);
+                return true;
+
+            case R.id.blog_nocolor:
+                setMyBoolVal("BLOG_COLOR_MODE", false, this);
+                restartLoader();
+                return true;
+
+            case R.id.blog_noavatar:
+                setMyBoolVal("BLOG_AVATAR", false, this);
+                return true;
+
+            case R.id.blog_avatar:
+                setMyBoolVal("BLOG_AVATAR", true, this);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void restartLoader() {
+        getSupportLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
+    }
+
+    public static void setMyBoolVal(String key, boolean value, Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+    public static boolean getMyBoolVal(String key, Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getBoolean(key, false);
+    }
+
+    @Override
+    protected void onResume() {
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    /**
+     * Called when a shared preference is changed, added, or removed. This
+     * may be called even if a preference is set to its existing value.
+     * <p>
+     * <p>This callback will be run on your main thread.
+     *
+     * @param sharedPreferences The {@link SharedPreferences} that received
+     *                          the change.
+     * @param key               The key of the preference that was changed, added, or
+     */
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        switch (key) {
+            case "BLOG_REFRESH":
+                new FetchBlogsTask(this).execute();
+                break;
+
+            default:
+                restartLoader();
+        }
     }
 }

@@ -78,6 +78,9 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
     HandleClickInterface mHandleClickInterface;
 
+    private boolean temp_blog_avatar = true;
+    private boolean temp_color_mode = false;
+
     public static interface HandleClickInterface {
         void onClick(int blog_id);
     }
@@ -94,11 +97,11 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
     /**
      * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
      * an item.
-     * <p/>
+     * <p>
      * This new ViewHolder should be constructed with a new View that can represent the items
      * of the given type. You can either create a new View manually or inflate it from an XML
      * layout file.
-     * <p/>
+     * <p>
      * The new ViewHolder will be used to display items of the adapter using
      * {@link #//onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display
      * different items in the data set, it is a good idea to cache references to sub views of
@@ -133,9 +136,10 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
         // Set the color before formatting the label.
         int colorRes = getMatchingColor(label.toUpperCase());
+        int colorVal = ContextCompat.getColor(mContext, colorRes);
 
-        viewHolder.tv_label.setBackgroundColor(ContextCompat.getColor(mContext, colorRes));
-        viewHolder.vBorderTop.setBackgroundColor(ContextCompat.getColor(mContext, colorRes));
+        viewHolder.tv_label.setBackgroundColor(colorVal);
+        viewHolder.vBorderTop.setBackgroundColor(colorVal);
 
         // Capitalize and replace "-" with " "
         label = label.replace("-", " ").toUpperCase();
@@ -151,14 +155,25 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
         viewHolder.tv_author.setText(author);
 
-        Glide.with(mContext).load(cursor.getString(cursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR_URL)))
-                .asBitmap()
-                .into(new SimpleTarget<Bitmap>(48, 48) {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                        viewHolder.tv_author.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mContext.getResources(), resource), null, null, null);
-                    }
-                });
+        if (temp_blog_avatar) {
+            Glide.with(mContext).load(cursor.getString(cursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR_URL)))
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>(48, 48) {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            viewHolder.tv_author.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mContext.getResources(), resource), null, null, null);
+                        }
+                    });
+        } else {
+            viewHolder.tv_author.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources()
+                    .getDrawable(R.drawable.ic_account_circle_black_24dp), null, null, null);
+        }
+
+        if (temp_color_mode) {
+            viewHolder.card_view.setCardBackgroundColor(colorVal);
+        } else {
+            viewHolder.card_view.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+        }
 
         viewHolder.tv_kudos.setText(kudos + " Kudos");
         viewHolder.tv_time.setText(formatDateTime(time));
@@ -183,6 +198,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
     @Override
     public Cursor swapCursor(Cursor newCursor) {
+        tempSetBool();
         mCursor = newCursor;
         Cursor c = super.swapCursor(newCursor);
 
@@ -191,6 +207,11 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
         }
 
         return c;
+    }
+
+    public void tempSetBool() {
+        temp_blog_avatar = BlogsActivity.getMyBoolVal("BLOG_AVATAR", mContext);
+        temp_color_mode = BlogsActivity.getMyBoolVal("BLOG_COLOR_MODE", mContext);
     }
 
     @Override
