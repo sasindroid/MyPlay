@@ -4,14 +4,18 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,10 +25,20 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.CursorAdapter;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.sasi.giffgaffplay.R;
 import com.sasi.giffgaffplay.data.BlogContract;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class BlogsItemActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -35,6 +49,14 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     int height = 0;
 
     private static final int CURSOR_LOADER_ID = 2;
+
+    private boolean temp_blog_avatar = true;
+    private boolean temp_color_mode = false;
+
+    public void tempSetBool() {
+        temp_blog_avatar = BlogsActivity.getMyBoolVal("BLOG_AVATAR", this);
+        temp_color_mode = BlogsActivity.getMyBoolVal("BLOG_COLOR_MODE", this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +79,13 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         }
 
         setScreenMetrics();
+        tempSetBool();
 
         wv_body = (WebView) findViewById(R.id.wv_body);
         wv_body.getSettings().setJavaScriptEnabled(true);
         wv_body.getSettings().setBuiltInZoomControls(true);
+//        wv_body.getSettings().setSupportZoom(true);
+//        wv_body.getSettings().setDisplayZoomControls(true);
 
         myWebChromeClient = new MyWebChromeClient();
 
@@ -154,6 +179,36 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         if (data != null && data.moveToFirst()) {
 
             String bodyStr = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_BODY));
+            int views = data.getInt(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_VIEWS));
+            String author = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR));
+            int kudos = data.getInt(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_KUDOS));
+            String time = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_POST_TIME));
+
+//            TextView tv_views = (TextView) findViewById(R.id.tv_views);
+//            final TextView tv_author = (TextView) findViewById(R.id.tv_author);
+//            TextView tv_kudos = (TextView) findViewById(R.id.tv_kudos);
+//            TextView tv_time = (TextView) findViewById(R.id.tv_time);
+//
+//
+//            tv_views.setText(views + " Views");
+//            tv_author.setText(author);
+//
+//            if (temp_blog_avatar) {
+//                Glide.with(this).load(data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR_URL)))
+//                        .asBitmap()
+//                        .into(new SimpleTarget<Bitmap>(48, 48) {
+//                            @Override
+//                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+//                                tv_author.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
+//                            }
+//                        });
+//            } else {
+//                tv_author.setCompoundDrawablesWithIntrinsicBounds(this.getResources()
+//                        .getDrawable(R.drawable.ic_account_circle_black_24dp), null, null, null);
+//            }
+//
+//            tv_kudos.setText(kudos + " Kudos");
+//            tv_time.setText(formatDateTime(time));
 
             loadWebView(bodyStr);
         }
@@ -289,6 +344,7 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     public void onBackPressed() {
 
         if (mCustomViewContainer != null)
+
             myWebChromeClient.onHideCustomView();
         else if (wv_body.canGoBack())
             wv_body.goBack();
@@ -301,5 +357,22 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 //        height = displaymetrics.heightPixels;
         width = displaymetrics.widthPixels;
+    }
+
+    private String formatDateTime(String time) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.UK);
+        try {
+            Date date = dateFormat.parse(time);
+
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK);
+
+            return dateFormat.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return time;
     }
 }
