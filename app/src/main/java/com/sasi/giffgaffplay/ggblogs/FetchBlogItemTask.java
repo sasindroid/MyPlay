@@ -5,7 +5,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebChromeClient;
 
+import com.sasi.giffgaffplay.data.BlogContentProvider;
 import com.sasi.giffgaffplay.data.BlogContract;
 
 import org.json.JSONObject;
@@ -27,6 +30,7 @@ public class FetchBlogItemTask extends AsyncTask<String, Void, Void> {
 
     private final Context mContext;
     private ArrayList<Integer> mBlogItemArrayList = null;
+    ArrayList<ContentValues> valuesArrayList = new ArrayList<>();
 
     public FetchBlogItemTask(Context context, ArrayList<Integer> blogItemArrayList) {
         mContext = context;
@@ -37,7 +41,7 @@ public class FetchBlogItemTask extends AsyncTask<String, Void, Void> {
      * Override this method to perform a computation on a background thread. The
      * specified parameters are the parameters passed to {@link #execute}
      * by the caller of this task.
-     * <p>
+     * <p/>
      * This method can call {@link #publishProgress} to publish updates
      * on the UI thread.
      *
@@ -59,7 +63,8 @@ public class FetchBlogItemTask extends AsyncTask<String, Void, Void> {
                 String jsonStr = connectAndGetData(blog_id);
 
                 if (jsonStr != null) {
-                    updateBlogItem(jsonStr, blog_id);
+//                    updateBlogItem(jsonStr, blog_id);
+                    buildBlogData(jsonStr, blog_id);
                 }
             }
         }
@@ -67,6 +72,17 @@ public class FetchBlogItemTask extends AsyncTask<String, Void, Void> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+
+        if (valuesArrayList != null && valuesArrayList.size() > 0) {
+
+            // Apply the batch update now.
+            int updatedCount = BlogContentProvider.bulkUpdateBodyData(mContext, valuesArrayList.toArray(new ContentValues[valuesArrayList.size()]));
+
+            Log.d(TAG, "BATCH UPDATES (BODY): " + updatedCount);
+        }
+    }
 
     private String connectAndGetData(int blog_id) {
 
@@ -140,6 +156,19 @@ public class FetchBlogItemTask extends AsyncTask<String, Void, Void> {
 
             mContext.getContentResolver().update(BlogContract.BlogEntry.CONTENT_URI, cv,
                     BlogContract.BlogEntry.COLUMN_BLOG_ID + " = " + blog_id, null);
+        }
+    }
+
+    private void buildBlogData(String jsonStr, int blog_id) {
+
+        String bodyStr = parseData(jsonStr);
+
+        if (bodyStr != null) {
+            ContentValues cv = new ContentValues();
+            cv.put(BlogContract.BlogEntry.COLUMN_BODY, bodyStr);
+            cv.put(BlogContract.BlogEntry.COLUMN_BLOG_ID, blog_id);
+
+            valuesArrayList.add(cv);
         }
     }
 

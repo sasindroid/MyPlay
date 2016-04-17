@@ -135,6 +135,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
         String time = cursor.getString(cursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_POST_TIME));
 
         // Set the color before formatting the label.
+        // THIS IS CAUSING A BIT LAG.
         int colorRes = getMatchingColor(label.toUpperCase());
         int colorVal = ContextCompat.getColor(mContext, colorRes);
 
@@ -146,7 +147,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
         viewHolder.tv_label.setText(label);
 
-        viewHolder.tv_subject.setText(subject);
+        viewHolder.tv_subject.setText(Html.fromHtml(subject));
         viewHolder.tv_teaser.setText(Html.fromHtml(teaser));
         viewHolder.tv_views.setText(views + " Views");
 

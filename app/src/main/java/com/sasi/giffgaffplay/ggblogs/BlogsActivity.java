@@ -172,7 +172,6 @@ public class BlogsActivity extends AppCompatActivity implements LoaderManager.Lo
 
             case R.id.blog_nocolor:
                 setMyBoolVal("BLOG_COLOR_MODE", false, this);
-                restartLoader();
                 return true;
 
             case R.id.blog_noavatar:
@@ -231,6 +230,8 @@ public class BlogsActivity extends AppCompatActivity implements LoaderManager.Lo
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        Log.d(TAG, "****ON PREFERENCE CHANGED CALLED*****");
 
         switch (key) {
             case "BLOG_REFRESH":

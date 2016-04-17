@@ -84,7 +84,8 @@
             <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".ggblogs.HTMLTextActivity">
+        <activity android:name=".ggblogs.HTMLTextActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
 
         <provider
@@ -94,10 +95,26 @@
             android:exported="false">
         </provider>
 
-        <activity android:name=".ggblogs.BlogsActivity">
+        <activity
+            android:name=".ggblogs.BlogsActivity"
+            android:label="Giffgaff Blogs">
         </activity>
-        <activity android:name=".ggblogs.BlogsItemActivity">
+
+        <!-- Lock the config changes to avoid issues with embedded video playback. -->
+        <activity
+            android:name=".ggblogs.BlogsItemActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="Blog Detail"
+            android:hardwareAccelerated="true"
+            android:parentActivityName=".ggblogs.BlogsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ggblogs.BlogsActivity"/>
         </activity>
+
         <activity
             android:name=".ggblogs.SettingsActivity"
             android:label="@string/title_activity_settings">

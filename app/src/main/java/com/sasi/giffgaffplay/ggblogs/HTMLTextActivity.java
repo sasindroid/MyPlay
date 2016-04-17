@@ -13,8 +13,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.sasi.giffgaffplay.R;
 
@@ -36,30 +41,52 @@ public class HTMLTextActivity extends AppCompatActivity {
     WebView wv;
     int width = 0;
 
+    String jsToast = "<script type=\"text/javascript\">function showAndroidToast(toast) {Android.showToast(toast);}</script>";
+
+    private View mCustomView;
+    private WebChromeClient.CustomViewCallback mCustomViewCallback;
+
+    private RelativeLayout mContentView;
+    private FrameLayout mCustomViewContainer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_htmltext);
 
         wv = (WebView) findViewById(R.id.wv);
+        wv.setWebChromeClient(new MyWebChromeClient());
+        wv.addJavascriptInterface(new WebAppInterface(this), "Android");
 
         setupWebView();
-
-
-        String htmlText = "<html><body>You scored <b>192</b> points. <A title=\"Intelligent Energy\" href=\"http://www.digitaltrends.com/mobile/intelligent-energy-iphone-fuel-cell-battery-news/\" target=\"_blank\" rel=\"nofollow\">Intelligent Energy</A></body></html>";
-
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 //        int height = displaymetrics.heightPixels;
         width = displaymetrics.widthPixels;
 
+        String htmlText = "<html><body>You scored <b>192</b> points. <A title=\"Intelligent Energy\" href=\"http://www.digitaltrends.com/mobile/intelligent-energy-iphone-fuel-cell-battery-news/\" target=\"_blank\" rel=\"nofollow\">Intelligent Energy</A></body></html>";
+
+
+        // 315 560
+        String htmlVideo =
+//                "<P><IFRAME onClick=\"showAndroidToast('IFRAME SRC!')\" src=\"https://www.youtube.com/embed/lfA3Mzqpbic\" allowfullscreen=\"allowfullscreen\" frameborder=\"0\" height=" + 100 + " width=" + 300 + "></IFRAME></P>" +
+                "<img onClick=\"showAndroidToast('Hello Android!')\" src=\"https://napa.i.lithium.com/t5/image/serverpage/image-id/128337i2F90323374D02577/image-size/medium?v=lz-1&px=400\" alt=\"iPhone SE & iPhone 6S side-by-side\" title=\"20160407_190111.jpg\" />" +
+                        "<input type=\"button\" value=\"Say hello\" onClick=\"showAndroidToast('Hello Android!')\" />\n" + jsToast;
+        String style = "style=width: 560px; height: 315px; left: 0px; top: 0px; transform: none;";
+
 //        ViewGroup.LayoutParams vc = wv.getLayoutParams();
 //        vc.width = width;
 //        wv.setLayoutParams(vc);
 
 //        wv.loadData(htmlText, "text/html", null);
-        wv.loadData("<style>img{display: inline;height: auto;max-width: 100%;}</style>" + htmlText, "text/html; charset=UTF-8", null);
+//        wv.loadData("<style>img{display: inline;height: auto;max-width: 100%;}</style>" + htmlVideo, "text/html; charset=UTF-8", null);
+
+        wv.loadData("<style>iframe{width: 560px; height: 315px; left: 0px; top: 0px; transform: none;}</style>" + htmlVideo, "text/html; charset=UTF-8", null);
+
+
+//        wv.loadUrl("<style>iframe{width: 560px; height: 315px; left: 0px; top: 0px; transform: none;}</style>" + "https://community.giffgaff.com/t5/Blog/Sony-Xperia-M5-Video-amp-Review-by-marktiddy/ba-p/18282829");
 //        wv.getSettings().setUseWideViewPort(false);
 
         new FetchJsonTask(this).execute();
@@ -184,6 +211,11 @@ public class HTMLTextActivity extends AppCompatActivity {
 
             String bodyStr = bodyObject.getString("$");
 
+            String replStr = "<img onClick=\"showAndroidToast('Hello Android!')\"";
+
+            bodyStr = bodyStr.replaceAll("<img", replStr);
+            bodyStr = bodyStr + jsToast;
+
             Log.d("HTMLTextActivity", "PARSED DATA: " + bodyStr);
 
             return bodyStr;
@@ -198,21 +230,18 @@ public class HTMLTextActivity extends AppCompatActivity {
     private void loadWebView(String bodyData) {
 
         if (bodyData != null) {
-            wv.loadData("<style>img{display: inline;height: auto;max-width: 100%;}video{display: inline;height: auto;max-width: 100%;}</style>" + bodyData, "text/html; charset=UTF-8", null);
+            wv.loadData("<style>img{display: inline;height: auto;max-width: 100%;}</style>" + bodyData, "text/html; charset=UTF-8", null);
 //            wv.loadData(bodyData, "text/html; charset=UTF-8", null);
         }
     }
 
     private void setupWebView() {
 
-//        wv.getSettings().setLoadWithOverviewMode(true);
+        wv.getSettings().setLoadWithOverviewMode(true);
 //        wv.getSettings().setUseWideViewPort(true);
 
         wv.getSettings().setJavaScriptEnabled(true);
         wv.setWebViewClient(new MyWebViewClient());
-
-//        wv.setClickable(true);
-//        wv.setFocusable(true);
 
         wv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,7 +281,9 @@ public class HTMLTextActivity extends AppCompatActivity {
         });
     }
 
+
     private class MyWebViewClient extends WebViewClient {
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 //            return super.shouldOverrideUrlLoading(view, url);
@@ -277,7 +308,7 @@ public class HTMLTextActivity extends AppCompatActivity {
 
             String url = (String) msg.getData().get("url");
 
-            Log.d(TAG, "Hander url: " + url);
+            Log.d(TAG, "Handler url: " + url);
 
         }
     };
@@ -299,6 +330,78 @@ public class HTMLTextActivity extends AppCompatActivity {
 
 
         return null;
+    }
+
+    private class MyWebChromeClient extends WebChromeClient {
+
+        FrameLayout.LayoutParams LayoutParameters = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT);
+
+        @Override
+        public void onShowCustomView(View view, CustomViewCallback callback) {
+
+            Log.d(TAG, "In onShowCustomView");
+
+//            super.onShowCustomView(view, callback);
+
+            // if a view already exists then immediately terminate the new one
+            if (mCustomView != null) {
+                callback.onCustomViewHidden();
+                return;
+            }
+
+            mContentView = (RelativeLayout) findViewById(R.id.rlParentView);
+            mContentView.setVisibility(View.GONE);
+            mCustomViewContainer = new FrameLayout(HTMLTextActivity.this);
+            mCustomViewContainer.setLayoutParams(LayoutParameters);
+            mCustomViewContainer.setBackgroundResource(android.R.color.black);
+            view.setLayoutParams(LayoutParameters);
+            mCustomViewContainer.addView(view);
+            mCustomView = view;
+            mCustomViewCallback = callback;
+            mCustomViewContainer.setVisibility(View.VISIBLE);
+            HTMLTextActivity.this.setContentView(mCustomViewContainer);
+        }
+
+        @Override
+        public void onHideCustomView() {
+
+            Log.d(TAG, "In onHideCustomView");
+
+            if (mCustomView == null) {
+                return;
+            } else {
+                // Hide the custom view.
+                mCustomView.setVisibility(View.GONE);
+                // Remove the custom view from its container.
+                mCustomViewContainer.removeView(mCustomView);
+                mCustomView = null;
+                mCustomViewContainer.setVisibility(View.GONE);
+                mCustomViewCallback.onCustomViewHidden();
+                // Show the content view.
+                mContentView.setVisibility(View.VISIBLE);
+                setContentView(mContentView);
+            }
+        }
+    }
+
+    public class WebAppInterface {
+        Context mContext;
+
+        /**
+         * Instantiate the interface and set the context
+         */
+        WebAppInterface(Context c) {
+            mContext = c;
+        }
+
+        /**
+         * Show a toast from the web page
+         */
+        @JavascriptInterface
+        public void showToast(String toast) {
+            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

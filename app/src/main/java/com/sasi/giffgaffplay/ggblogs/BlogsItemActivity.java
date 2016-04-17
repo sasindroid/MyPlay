@@ -4,32 +4,85 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.CursorAdapter;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.sasi.giffgaffplay.R;
+import com.sasi.giffgaffplay.data.BlogContract;
 
 public class BlogsItemActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    WebView wv;
+    private static final String TAG = "AppCompatActivity";
+    WebView wv_body;
     int blog_id;
+    int width = 0;
+    int height = 0;
+
+    private static final int CURSOR_LOADER_ID = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blogs_item);
+        setContentView(R.layout.activity_blogs_item_new);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent intent = getIntent();
 
-        if(intent != null && intent.hasExtra("BLOG_ID")) {
+        if (intent != null && intent.hasExtra("BLOG_ID")) {
             blog_id = intent.getIntExtra("BLOG_ID", 0);
         }
 
-        wv = (WebView) findViewById(R.id.wv);
+        setScreenMetrics();
+
+        wv_body = (WebView) findViewById(R.id.wv_body);
+        wv_body.getSettings().setJavaScriptEnabled(true);
+        wv_body.getSettings().setBuiltInZoomControls(true);
+
+        myWebChromeClient = new MyWebChromeClient();
+
+        wv_body.setWebChromeClient(myWebChromeClient);
+
+        if (blog_id > 0) {
+            // Initiate the Loader Task (Background task)
+            getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            // Handle the Action bar home up button - Custom
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -41,7 +94,19 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+
+
+        Log.d(TAG, "onCreateLoader called");
+
+        Uri uri = BlogContract.BlogEntry.CONTENT_URI;
+        String[] projection = new String[]{BlogContract.BlogEntry._ID,
+                BlogContract.BlogEntry.COLUMN_BLOG_ID, BlogContract.BlogEntry.COLUMN_POST_TIME, BlogContract.BlogEntry.COLUMN_LAST_EDIT_TIME,
+                BlogContract.BlogEntry.COLUMN_LAST_EDIT_AUTHOR, BlogContract.BlogEntry.COLUMN_KUDOS, BlogContract.BlogEntry.COLUMN_LABEL,
+                BlogContract.BlogEntry.COLUMN_TEASER, BlogContract.BlogEntry.COLUMN_BODY, BlogContract.BlogEntry.COLUMN_VIEWS,
+                BlogContract.BlogEntry.COLUMN_SUBJECT, BlogContract.BlogEntry.COLUMN_AUTHOR, BlogContract.BlogEntry.COLUMN_AUTHOR_URL
+        };
+        String selection = BlogContract.BlogEntry.COLUMN_BLOG_ID + " = " + blog_id;
+        return new android.support.v4.content.CursorLoader(this, uri, projection, selection, null, null);
     }
 
     /**
@@ -50,14 +115,14 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
      * transactions while in this call, since it can happen after an
      * activity's state is saved.  See {@link //FragmentManager#beginTransaction()
      * FragmentManager.openTransaction()} for further discussion on this.
-     * <p>
+     * <p/>
      * <p>This function is guaranteed to be called prior to the release of
      * the last data that was supplied for this Loader.  At this point
      * you should remove all use of the old data (since it will be released
      * soon), but should not do your own release of the data since its Loader
      * owns it and will take care of that.  The Loader will take care of
      * management of its data so you don't have to.  In particular:
-     * <p>
+     * <p/>
      * <ul>
      * <li> <p>The Loader will monitor for changes to the data, and report
      * them to you through new calls here.  You should not monitor the
@@ -86,6 +151,12 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        if (data != null && data.moveToFirst()) {
+
+            String bodyStr = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_BODY));
+
+            loadWebView(bodyStr);
+        }
     }
 
     /**
@@ -98,5 +169,137 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+//    private void loadWebView(String bodyData) {
+//
+////        Log.d(TAG, "BODYDATA: " + bodyData);
+//
+//        if(width == 0) {
+//            width = 300;
+//            height = width;
+//        }
+//        else if(width > 350) {
+//            width = 350;
+//            height = 350;
+//        }
+//        else {
+//            height = width;
+//        }
+//
+//        if (bodyData != null) {
+//            wv_body.loadData(
+//                    "<style>img{display: inline;height: auto;max-width: 100%;}"
+//                            + "iframe{display: inline;height: 350px;width: 350px}"
+////                            + "iframe{display: inline;height: auto;max-width: 100%}"
+//                            + "</style>"
+//                            + bodyData, "text/html; charset=UTF-8", null);
+//        }
+//    }
+
+    private void loadWebView(String bodyData) {
+
+        Log.d(TAG, "WIDTH IN: " + width);
+
+        if (width == 0) {
+            width = 300;
+            height = width;
+        } else if (width > 350) {
+            width = 350;
+            height = 350;
+        } else {
+
+            width = width - 20;
+            height = width;
+        }
+
+        Log.d(TAG, "WIDTH OUT: " + width);
+
+        if (bodyData != null) {
+            wv_body.loadData(
+                    "<style>img{display: inline;height: auto;max-width: 100%;}"
+//                            + "iframe{display: inline;height: 350px;width: 350px}"
+                            + "iframe{display: inline;height: " + height + "px;width: " + width + "px}"
+//                            + "iframe{display: inline;height: auto;max-width: 100%}"
+                            + "</style>"
+                            + bodyData, "text/html; charset=UTF-8", null);
+        }
+    }
+
+    private View mCustomView;
+    private WebChromeClient.CustomViewCallback mCustomViewCallback;
+    private MyWebChromeClient myWebChromeClient;
+    private CoordinatorLayout mContentView;
+    private FrameLayout mCustomViewContainer;
+
+    private class MyWebChromeClient extends WebChromeClient {
+
+        FrameLayout.LayoutParams LayoutParameters = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT);
+
+        @Override
+        public void onShowCustomView(View view, CustomViewCallback callback) {
+
+            Log.d(TAG, "In onShowCustomView");
+
+//            super.onShowCustomView(view, callback);
+
+            // if a view already exists then immediately terminate the new one
+            if (mCustomView != null) {
+                callback.onCustomViewHidden();
+                return;
+            }
+
+            mContentView = (CoordinatorLayout) findViewById(R.id.clParentView);
+            mContentView.setVisibility(View.GONE);
+            mCustomViewContainer = new FrameLayout(BlogsItemActivity.this);
+            mCustomViewContainer.setLayoutParams(LayoutParameters);
+            mCustomViewContainer.setBackgroundResource(android.R.color.black);
+            view.setLayoutParams(LayoutParameters);
+            mCustomViewContainer.addView(view);
+            mCustomView = view;
+            mCustomViewCallback = callback;
+            mCustomViewContainer.setVisibility(View.VISIBLE);
+            BlogsItemActivity.this.setContentView(mCustomViewContainer);
+        }
+
+        @Override
+        public void onHideCustomView() {
+
+            Log.d(TAG, "In onHideCustomView");
+
+            if (mCustomView == null) {
+                return;
+            } else {
+                // Hide the custom view.
+                mCustomView.setVisibility(View.GONE);
+                // Remove the custom view from its container.
+                mCustomViewContainer.removeView(mCustomView);
+                mCustomView = null;
+                mCustomViewContainer.setVisibility(View.GONE);
+                mCustomViewCallback.onCustomViewHidden();
+                // Show the content view.
+                mContentView.setVisibility(View.VISIBLE);
+                setContentView(mContentView);
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (mCustomViewContainer != null)
+            myWebChromeClient.onHideCustomView();
+        else if (wv_body.canGoBack())
+            wv_body.goBack();
+        else
+            super.onBackPressed();
+    }
+
+    private void setScreenMetrics() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//        height = displaymetrics.heightPixels;
+        width = displaymetrics.widthPixels;
     }
 }

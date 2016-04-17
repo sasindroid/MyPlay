@@ -1,12 +1,19 @@
 package com.sasi.giffgaffplay.data;
 
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.RemoteException;
+
+import java.util.ArrayList;
 
 public class BlogContentProvider extends ContentProvider {
 
@@ -206,5 +213,70 @@ public class BlogContentProvider extends ContentProvider {
             default:
                 return super.bulkInsert(uri, values);
         }
+    }
+
+    public static int bulkUpdateAuthorURL(Context context, ContentValues[] values) {
+
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+
+        for (ContentValues value : values) {
+
+
+            operations.add(
+                    ContentProviderOperation.newUpdate(BlogContract.BlogEntry.CONTENT_URI)
+                            .withSelection(BlogContract.BlogEntry.COLUMN_BLOG_ID + " = " + value.getAsInteger(BlogContract.BlogEntry.COLUMN_BLOG_ID), null)
+                            .withValue(BlogContract.BlogEntry.COLUMN_AUTHOR_URL, value.getAsString(BlogContract.BlogEntry.COLUMN_AUTHOR_URL))
+                            .build()
+            );
+
+//            operations.add(
+//                    ContentProviderOperation.newUpdate(uri)
+//                            .withSelection(selection, selectionArgs)
+//                            .withValue(key, value.getAsString(BlogContract.BlogEntry.COLUMN_AUTHOR_URL))
+//                            .build()
+//            );
+        }
+
+        if (operations != null && operations.size() > 0) {
+            try {
+                ContentProviderResult[] result = context.getContentResolver().applyBatch(BlogContract.CONTENT_AUTHORITY, operations);
+                return result.length;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (OperationApplicationException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return 0;
+    }
+
+    public static int bulkUpdateBodyData(Context context, ContentValues[] values) {
+
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+
+        for (ContentValues value : values) {
+
+
+            operations.add(
+                    ContentProviderOperation.newUpdate(BlogContract.BlogEntry.CONTENT_URI)
+                            .withSelection(BlogContract.BlogEntry.COLUMN_BLOG_ID + " = " + value.getAsInteger(BlogContract.BlogEntry.COLUMN_BLOG_ID), null)
+                            .withValue(BlogContract.BlogEntry.COLUMN_BODY, value.getAsString(BlogContract.BlogEntry.COLUMN_BODY))
+                            .build()
+            );
+        }
+
+        if (operations != null && operations.size() > 0) {
+            try {
+                ContentProviderResult[] result = context.getContentResolver().applyBatch(BlogContract.CONTENT_AUTHORITY, operations);
+                return result.length;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (OperationApplicationException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return 0;
     }
 }
