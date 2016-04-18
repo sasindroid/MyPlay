@@ -81,6 +81,9 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
     private boolean temp_blog_avatar = true;
     private boolean temp_color_mode = false;
 
+    int colorRes;
+    int colorTintRes;
+
     public static interface HandleClickInterface {
         void onClick(int blog_id);
     }
@@ -97,11 +100,11 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
     /**
      * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
      * an item.
-     * <p>
+     * <p/>
      * This new ViewHolder should be constructed with a new View that can represent the items
      * of the given type. You can either create a new View manually or inflate it from an XML
      * layout file.
-     * <p>
+     * <p/>
      * The new ViewHolder will be used to display items of the adapter using
      * {@link #//onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display
      * different items in the data set, it is a good idea to cache references to sub views of
@@ -173,7 +176,8 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
         if (temp_color_mode) {
             viewHolder.card_view.setCardBackgroundColor(colorVal);
         } else {
-            viewHolder.card_view.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+//            viewHolder.card_view.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            viewHolder.card_view.setCardBackgroundColor(ContextCompat.getColor(mContext, colorTintRes));
         }
 
         viewHolder.tv_kudos.setText(kudos + " Kudos");
@@ -274,11 +278,10 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
     private int getMatchingColor(String label) {
 
-        int colorRes;
-
         switch (label) {
             case LABEL_MOBILE_NEWS:
                 colorRes = R.color.blog_label_mobile_news;
+                colorTintRes = R.color.blog_label_mobile_news_tint;
                 break;
 
             case LABEL_GIFFGAFF_NEWS:
@@ -287,6 +290,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
             case LABEL_GIFFGAFF_NEWS_LATEST:
             case LABEL_GIFFGAFF_NEWS_COMPETITIONS:
                 colorRes = R.color.blog_label_giffgaff_news;
+                colorTintRes = R.color.blog_label_giffgaff_news_tint;
                 break;
 
             case LABEL_PHONE_REVIEWS:
@@ -299,6 +303,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
             case LABEL_PHONE_REVIEWS_TIPS:
             case LABEL_PHONE_REVIEWS_ACCESSORIES:
                 colorRes = R.color.blog_label_phone_reviews;
+                colorTintRes = R.color.blog_label_phone_reviews_tint;
                 break;
 
             case LABEL_APP_REVIEWS:
@@ -308,6 +313,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
             case LABEL_APP_REVIEWS_BLACKBERRY:
             case LABEL_APP_REVIEWS_TABLETS:
                 colorRes = R.color.blog_label_app_reviews;
+                colorTintRes = R.color.blog_label_app_reviews_tint;
                 break;
 
             case LABEL_JUST_FOR_FUN:
@@ -317,6 +323,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
             case LABEL_JUST_FOR_FUN_OTHER_FUN_STUFF:
             case LABEL_JUST_FOR_FUN_FRIDAY_POLLS:
                 colorRes = R.color.blog_label_just_for_fun;
+                colorTintRes = R.color.blog_label_just_for_fun_tint;
                 break;
 
             case LABEL_PHONE_UNLOCKING:
@@ -326,10 +333,12 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
             case LABEL_PHONE_UNLOCKING_BLACKBERRY:
             case LABEL_PHONE_UNLOCKING_TABLETS:
                 colorRes = R.color.blog_label_phone_unlocking;
+                colorTintRes = R.color.blog_label_phone_unlocking_tint;
                 break;
 
             default:
                 colorRes = R.color.blog_label_default;
+                colorTintRes = R.color.blog_label_default_tint;
         }
 
         return colorRes;
