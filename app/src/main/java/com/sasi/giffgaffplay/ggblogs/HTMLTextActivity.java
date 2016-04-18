@@ -70,33 +70,17 @@ public class HTMLTextActivity extends AppCompatActivity {
 
 
         // 315 560
-        String htmlVideo =
-//                "<P><IFRAME onClick=\"showAndroidToast('IFRAME SRC!')\" src=\"https://www.youtube.com/embed/lfA3Mzqpbic\" allowfullscreen=\"allowfullscreen\" frameborder=\"0\" height=" + 100 + " width=" + 300 + "></IFRAME></P>" +
-                "<img onClick=\"showAndroidToast('Hello Android!')\" src=\"https://napa.i.lithium.com/t5/image/serverpage/image-id/128337i2F90323374D02577/image-size/medium?v=lz-1&px=400\" alt=\"iPhone SE & iPhone 6S side-by-side\" title=\"20160407_190111.jpg\" />" +
-                        "<input type=\"button\" value=\"Say hello\" onClick=\"showAndroidToast('Hello Android!')\" />\n" + jsToast;
-        String style = "style=width: 560px; height: 315px; left: 0px; top: 0px; transform: none;";
-
-//        ViewGroup.LayoutParams vc = wv.getLayoutParams();
-//        vc.width = width;
-//        wv.setLayoutParams(vc);
-
-//        wv.loadData(htmlText, "text/html", null);
-//        wv.loadData("<style>img{display: inline;height: auto;max-width: 100%;}</style>" + htmlVideo, "text/html; charset=UTF-8", null);
-
-        wv.loadData("<style>iframe{width: 560px; height: 315px; left: 0px; top: 0px; transform: none;}</style>" + htmlVideo, "text/html; charset=UTF-8", null);
-
-
-//        wv.loadUrl("<style>iframe{width: 560px; height: 315px; left: 0px; top: 0px; transform: none;}</style>" + "https://community.giffgaff.com/t5/Blog/Sony-Xperia-M5-Video-amp-Review-by-marktiddy/ba-p/18282829");
-//        wv.getSettings().setUseWideViewPort(false);
+//        String htmlVideo =
+//                "<img onClick=\"showAndroidToast('Hello Android!')\" src=\"https://napa.i.lithium.com/t5/image/serverpage/image-id/128337i2F90323374D02577/image-size/medium?v=lz-1&px=400\" alt=\"iPhone SE & iPhone 6S side-by-side\" title=\"20160407_190111.jpg\" />" +
+//                        "<input type=\"button\" value=\"Say hello\" onClick=\"showAndroidToast('Hello Android!')\" />\n" + jsToast;
+//        String style = "style=width: 560px; height: 315px; left: 0px; top: 0px; transform: none;";
+//
+//        wv.loadData("<style>iframe{width: 560px; height: 315px; left: 0px; top: 0px; transform: none;}</style>" + htmlVideo, "text/html; charset=UTF-8", null);
 
         new FetchJsonTask(this).execute();
-
-//        new FetchBlogsTask(this).execute();
-
     }
 
     public class FetchJsonTask extends AsyncTask<Void, Void, String> {
-
 
         private final String LOG_TAG = FetchJsonTask.class.getSimpleName();
 
@@ -118,7 +102,6 @@ public class HTMLTextActivity extends AppCompatActivity {
             String jsonStr;
 
             Uri builtUri;
-
 
             try {
 //                18284109 18441179
@@ -186,8 +169,6 @@ public class HTMLTextActivity extends AppCompatActivity {
                 editor.putString("JSON", bodyData);
                 editor.commit();
 
-//                wv.loadData(bodyData, "text/html", null);
-//                wv.loadData("<style>img{display: inline;height: auto;max-width: 100%;}</style>" + bodyData, "text/html; charset=UTF-8", null);
                 loadWebView(bodyData);
             } else {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -211,12 +192,16 @@ public class HTMLTextActivity extends AppCompatActivity {
 
             String bodyStr = bodyObject.getString("$");
 
-            String replStr = "<img onClick=\"showAndroidToast('Hello Android!')\"";
+//            String replStr = "<img onClick=\"showAndroidToast('Hello Android!')\"";
 
-            bodyStr = bodyStr.replaceAll("<img", replStr);
-            bodyStr = bodyStr + jsToast;
+//            bodyStr = bodyStr.replaceAll("<img", replStr);
 
-            Log.d("HTMLTextActivity", "PARSED DATA: " + bodyStr);
+            // Parse using JSoup
+            parseUsingJsoup(bodyStr);
+
+            bodyStr = jsToast + bodyStr;
+
+//            Log.d("HTMLTextActivity", "PARSED DATA: " + bodyStr);
 
             return bodyStr;
 
@@ -315,13 +300,21 @@ public class HTMLTextActivity extends AppCompatActivity {
 
     private void parseUsingJsoup(String bodyData) {
 
-        String sampleData = "<P><span class=\\\"lia-inline-image-display-wrapper lia-image-align-inline\\\" style=\\\"width: 600px;\\\"><img src=\\\"https:\\/\\/napa.i.lithium.com\\/t5\\/image\\/serverpage\\/image-id\\/128700i24C3249BD25535A4\\/image-size\\/large?v=lz-1&px=600\\\" alt=\\\"Phone-reviews.jpg\\\" title=\\\"Phone-reviews.jpg\\\" \\/><\\/span>\uFEFF<\\/P>\\n<P> <\\/P>\\n<P>Today, many of the latest high-end smartphones contain a new technology known as Qualcomm Quick Charge. The technology potentially allows you to charge your smartphone up to four times faster than with a normal charger.<\\/P>";
+//        String sampleData = "<P><span class=\\\"lia-inline-image-display-wrapper lia-image-align-inline\\\" style=\\\"width: 600px;\\\"><img src=\\\"https:\\/\\/napa.i.lithium.com\\/t5\\/image\\/serverpage\\/image-id\\/128700i24C3249BD25535A4\\/image-size\\/large?v=lz-1&px=600\\\" alt=\\\"Phone-reviews.jpg\\\" title=\\\"Phone-reviews.jpg\\\" \\/><\\/span>\uFEFF<\\/P>\\n<P> <\\/P>\\n<P>Today, many of the latest high-end smartphones contain a new technology known as Qualcomm Quick Charge. The technology potentially allows you to charge your smartphone up to four times faster than with a normal charger.<\\/P>";
 
-        final Document document = Jsoup.parse(sampleData);
+        final Document document = Jsoup.parse(bodyData);
 
-        Log.d(TAG, "JSOUP DOCUMENT: " + document.toString());
+//        Log.d(TAG, "JSOUP DOCUMENT: " + document.toString());
 
         JSONObject jsonObject = null;
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("JSOUP_JSON", document.toString());
+        editor.commit();
+
+        Log.d(TAG, "JSOUP ELEMENTS: " + document.body().html());
+
     }
 
     private String getTeaserText(String bodyData) {
@@ -401,6 +394,32 @@ public class HTMLTextActivity extends AppCompatActivity {
         @JavascriptInterface
         public void showToast(String toast) {
             Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public class Task1 extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            String json = null;
+
+            try {
+                json = Jsoup.connect("https://community.giffgaff.com/t5/Blog/bg-p/giffgaff/label-name/mobile-news").ignoreContentType(true).execute().body();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+//            final Document document = Jsoup.parse(bodyData);
+
+            Log.d(TAG, "JSOUP JSON: " + s);
         }
     }
 

@@ -25,4 +25,12 @@
     <color name="blog_label_just_for_fun">#2fbdd3</color>
     <color name="blog_label_phone_unlocking">#4064d6</color>
 
+    <color name="blog_label_default_tint">#dbfffb</color>
+    <color name="blog_label_mobile_news_tint">#fdefe7</color>
+    <color name="blog_label_giffgaff_news_tint">#f2f9eb</color>
+    <color name="blog_label_phone_reviews_tint">#fff6db</color>
+    <color name="blog_label_app_reviews_tint">#fde6ed</color>
+    <color name="blog_label_just_for_fun_tint">#e1f6f9</color>
+    <color name="blog_label_phone_unlocking_tint">#e1e7f9</color>
+
 </resources>

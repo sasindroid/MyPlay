@@ -17,6 +17,11 @@
           android:orderInCategory="100"
           app:showAsAction="never"/>
 
+    <item android:id="@+id/blog_bgcolor"
+          android:title="Bg alpha mode"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
     <item android:id="@+id/blog_noavatar"
           android:title="No Avatar"
           android:orderInCategory="100"

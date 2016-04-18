@@ -174,6 +174,10 @@ public class BlogsActivity extends AppCompatActivity implements LoaderManager.Lo
                 setMyBoolVal("BLOG_COLOR_MODE", false, this);
                 return true;
 
+            case R.id.blog_bgcolor:
+                setMyBoolVal("BLOG_COLOR_BGMODE", false, this);
+                return true;
+
             case R.id.blog_noavatar:
                 setMyBoolVal("BLOG_AVATAR", false, this);
                 return true;

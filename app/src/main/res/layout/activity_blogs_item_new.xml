@@ -12,9 +12,10 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!--android:layout_height="@dimen/app_bar_height"-->
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
@@ -24,7 +25,97 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/AppTheme.TitleTextStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@+id/detail_toolbar">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:padding="10dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_author_avatar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    tools:src="@drawable/ic_account_circle_black_24dp"/>
+
+                <android.support.v7.widget.GridLayout
+                    android:id="@+id/gl_blog_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@+id/iv_author_avatar"
+                    app:columnCount="2"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:gravity="left|center"
+                        android:padding="3dp"
+                        android:textSize="14sp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal"
+                        tools:text="zerodudex333"/>
+
+                    <TextView
+                        android:id="@+id/tv_kudos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="3dp"
+                        android:textSize="14sp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal"
+                        tools:text="13 Kudos"/>
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:padding="3dp"
+                        android:textSize="14sp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal"
+                        tools:text="04/04/2016 12:21"/>
+
+                    <TextView
+                        android:id="@+id/tv_views"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="3dp"
+                        android:textSize="14sp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal"
+                        tools:text="200 Views"/>
+                </android.support.v7.widget.GridLayout>
+
+                <TextView
+                    android:id="@+id/tv_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/gl_blog_item"
+                    android:layout_margin="10dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    tools:text="The Latest Apps and Games - March 2016"
+                    />
+
+            </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_toolbar"
@@ -34,109 +125,7 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
     </android.support.design.widget.AppBarLayout>
-
-    <!--<android.support.design.widget.AppBarLayout-->
-    <!--android:id="@+id/app_bar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="200dp"-->
-    <!--android:fitsSystemWindows="true"-->
-    <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
-    <!--&lt;!&ndash;android:layout_height="@dimen/app_bar_height"&ndash;&gt;-->
-
-    <!--<android.support.design.widget.CollapsingToolbarLayout-->
-    <!--android:id="@+id/toolbar_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:fitsSystemWindows="true"-->
-    <!--app:contentScrim="?attr/colorPrimary"-->
-    <!--app:expandedTitleTextAppearance="@style/AppTheme.TitleTextStyle"-->
-    <!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
-    <!--app:toolbarId="@+id/detail_toolbar">-->
-
-    <!--<android.support.v7.widget.Toolbar-->
-    <!--android:id="@+id/detail_toolbar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:layout_collapseMode="pin"-->
-    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light">-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="?attr/actionBarSize"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:padding="10dp"-->
-    <!--android:visibility="visible">-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/tv_author_avatar"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--tools:src="@drawable/ic_account_circle_black_24dp"-->
-    <!--/>-->
-
-    <!--<android.support.v7.widget.GridLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:layout_margin="10dp"-->
-    <!--app:columnCount="2"-->
-    <!--&gt;-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_author"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:drawablePadding="5dp"-->
-    <!--android:gravity="left|center"-->
-    <!--android:padding="3dp"-->
-    <!--android:textSize="12sp"-->
-    <!--app:layout_columnWeight="1"-->
-    <!--app:layout_gravity="fill_horizontal"-->
-    <!--tools:text="zerodudex333"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_kudos"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="right"-->
-    <!--android:padding="3dp"-->
-    <!--android:textSize="12sp"-->
-    <!--app:layout_columnWeight="1"-->
-    <!--app:layout_gravity="fill_horizontal"-->
-    <!--tools:text="13 Kudos"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_time"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="left"-->
-    <!--android:padding="3dp"-->
-    <!--android:textSize="12sp"-->
-    <!--app:layout_columnWeight="1"-->
-    <!--app:layout_gravity="fill_horizontal"-->
-    <!--tools:text="04/04/2016 12:21"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tv_views"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="right"-->
-    <!--android:padding="3dp"-->
-    <!--android:textSize="12sp"-->
-    <!--app:layout_columnWeight="1"-->
-    <!--app:layout_gravity="fill_horizontal"-->
-    <!--tools:text="200 Views"/>-->
-    <!--</android.support.v7.widget.GridLayout>-->
-    <!--</LinearLayout>-->
-
-    <!--</android.support.v7.widget.Toolbar>-->
-    <!--</android.support.design.widget.CollapsingToolbarLayout>-->
-
-    <!--</android.support.design.widget.AppBarLayout>-->
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/detail_container"
@@ -148,8 +137,21 @@
             android:id="@+id/wv_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"></WebView>
+            android:padding="10dp"
+            android:scrollbarStyle="outsideOverlay"/>
     </android.support.v4.widget.NestedScrollView>
+
+    <!--Getting the Webview out of the NestedScrollView created issues with -->
+    <!--collapsing the Toolbar.-->
+
+    <!--<WebView-->
+    <!--android:id="@+id/wv_body"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--android:scrollbarStyle="outsideOverlay"-->
+    <!--android:padding="10dp"-->
+    <!--/>-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -157,24 +159,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_thumb_up_black_48dp"
-        app:layout_anchor="@id/app_bar"
+        app:layout_anchor="@id/detail_container"
         app:layout_anchorGravity="bottom|end"/>
 
-    <!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;android:id="@+id/tvHTMLText"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_height="match_parent"/>&ndash;&gt;-->
-
-    <!--<WebView-->
-    <!--android:id="@+id/wv_body"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:padding="10dp"></WebView>-->
-
-    <!--</ScrollView>-->
 
 </android.support.design.widget.CoordinatorLayout>

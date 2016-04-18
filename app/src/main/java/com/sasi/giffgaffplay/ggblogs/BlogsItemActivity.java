@@ -4,19 +4,17 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,13 +23,10 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.CursorAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.sasi.giffgaffplay.R;
 import com.sasi.giffgaffplay.data.BlogContract;
 
@@ -85,7 +80,9 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         wv_body.getSettings().setJavaScriptEnabled(true);
         wv_body.getSettings().setBuiltInZoomControls(true);
 //        wv_body.getSettings().setSupportZoom(true);
-//        wv_body.getSettings().setDisplayZoomControls(true);
+
+        // Don't show zoom controls.
+        wv_body.getSettings().setDisplayZoomControls(false);
 
         myWebChromeClient = new MyWebChromeClient();
 
@@ -183,32 +180,31 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
             String author = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR));
             int kudos = data.getInt(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_KUDOS));
             String time = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_POST_TIME));
+            String subject = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_SUBJECT));
 
-//            TextView tv_views = (TextView) findViewById(R.id.tv_views);
-//            final TextView tv_author = (TextView) findViewById(R.id.tv_author);
-//            TextView tv_kudos = (TextView) findViewById(R.id.tv_kudos);
-//            TextView tv_time = (TextView) findViewById(R.id.tv_time);
-//
-//
-//            tv_views.setText(views + " Views");
-//            tv_author.setText(author);
-//
-//            if (temp_blog_avatar) {
-//                Glide.with(this).load(data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR_URL)))
-//                        .asBitmap()
-//                        .into(new SimpleTarget<Bitmap>(48, 48) {
-//                            @Override
-//                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-//                                tv_author.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
-//                            }
-//                        });
-//            } else {
-//                tv_author.setCompoundDrawablesWithIntrinsicBounds(this.getResources()
-//                        .getDrawable(R.drawable.ic_account_circle_black_24dp), null, null, null);
-//            }
-//
-//            tv_kudos.setText(kudos + " Kudos");
-//            tv_time.setText(formatDateTime(time));
+            TextView tv_views = (TextView) findViewById(R.id.tv_views);
+            final TextView tv_author = (TextView) findViewById(R.id.tv_author);
+            TextView tv_kudos = (TextView) findViewById(R.id.tv_kudos);
+            TextView tv_time = (TextView) findViewById(R.id.tv_time);
+            ImageView iv_author_avatar = (ImageView) findViewById(R.id.iv_author_avatar);
+            TextView tv_subject = (TextView) findViewById(R.id.tv_subject);
+
+            // Disable scrolling using ScrollView, instead use the WebView.
+            NestedScrollView detail_container = (NestedScrollView) findViewById(R.id.detail_container);
+
+            tv_subject.setText(Html.fromHtml(subject));
+            tv_views.setText(views + " Views");
+            tv_author.setText(author);
+
+            if (temp_blog_avatar) {
+                Glide.with(this).load(data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR_URL))).into(iv_author_avatar);
+
+            } else {
+                iv_author_avatar.setImageResource(R.drawable.ic_account_circle_black_24dp);
+            }
+
+            tv_kudos.setText(kudos + " Kudos");
+            tv_time.setText(formatDateTime(time));
 
             loadWebView(bodyStr);
         }
@@ -225,32 +221,6 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-
-//    private void loadWebView(String bodyData) {
-//
-////        Log.d(TAG, "BODYDATA: " + bodyData);
-//
-//        if(width == 0) {
-//            width = 300;
-//            height = width;
-//        }
-//        else if(width > 350) {
-//            width = 350;
-//            height = 350;
-//        }
-//        else {
-//            height = width;
-//        }
-//
-//        if (bodyData != null) {
-//            wv_body.loadData(
-//                    "<style>img{display: inline;height: auto;max-width: 100%;}"
-//                            + "iframe{display: inline;height: 350px;width: 350px}"
-////                            + "iframe{display: inline;height: auto;max-width: 100%}"
-//                            + "</style>"
-//                            + bodyData, "text/html; charset=UTF-8", null);
-//        }
-//    }
 
     private void loadWebView(String bodyData) {
 
@@ -278,6 +248,19 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
 //                            + "iframe{display: inline;height: auto;max-width: 100%}"
                             + "</style>"
                             + bodyData, "text/html; charset=UTF-8", null);
+
+//            StringBuilder html = new StringBuilder();
+//            html.append("<html>");
+//            html.append("<head>");
+//
+//            html.append("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css\">");
+//            html.append("</head>");
+//            html.append("<body>");
+//            html.append(bodyData);
+//            html.append("</body>");
+//            html.append("</html>");
+//
+//            wv_body.loadData(html.toString(), "text/html; charset=UTF-8", null);
         }
     }
 
