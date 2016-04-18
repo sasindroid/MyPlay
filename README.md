@@ -19,4 +19,4 @@ Use for educational purpose only.
 
 ###License###
 
-PopularMovies is distributed under the MIT license.
+MyPlay is distributed under the MIT license.
