@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -25,6 +26,7 @@ import android.widget.CursorAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.sasi.giffgaffplay.R;
@@ -95,6 +97,14 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_blog, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
@@ -102,6 +112,11 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+
+            case R.id.blog_item_kudos:
+                Toast.makeText(this, "Kudos revoked!", Toast.LENGTH_SHORT).show();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -358,4 +373,5 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
 
         return time;
     }
+
 }

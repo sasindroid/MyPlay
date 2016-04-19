@@ -33,6 +33,8 @@ public class BlogsActivity extends AppCompatActivity implements LoaderManager.Lo
 
     private static final int CURSOR_LOADER_ID = 1;
 
+    public static final String LITHIUM_TOKEN = "~2yqLumh502A76S8L1~wKYQZnv4C1LXDyAxe_BntXpH38PsfXUfigXTc7AuLisRD9AzRqNefzsVoNK0yyykPnaO6KoM31MedwMRUi7wT0_Vg-LRkKSOFD4z_gf4RGxABpOVx1iiwUm7_HDw7ePun83PrhbhVJ_Uz9XbIibnXoiRvAkdOCKKTqGKLRj4lQBWHUDu4LtZrI46FN6Chnp6";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
