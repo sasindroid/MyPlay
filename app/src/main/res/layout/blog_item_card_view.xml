@@ -59,6 +59,7 @@
                     android:layout_margin="10dp"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:transitionName="SCENE_TRANSITION_DETAIL_SUBJECT"
                     tools:text="The Latest Apps and Games - March 2016"
                     />
 
@@ -98,18 +99,46 @@
                 card_view:columnCount="2"
                 >
 
-                <TextView
-                    android:id="@+id/tv_author"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_account_circle_black_24dp"
-                    android:drawablePadding="5dp"
-                    android:gravity="left|center"
-                    android:padding="3dp"
-                    android:textSize="12sp"
+                    android:orientation="horizontal"
                     card_view:layout_columnWeight="1"
                     card_view:layout_gravity="fill_horizontal"
-                    tools:text="zerodudex333"/>
+                    >
+                    <ImageView
+                        android:id="@+id/iv_author_avatar"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:padding="3dp"
+                        android:layout_gravity="center"
+                        android:transitionName="SCENE_TRANSITION_DETAIL"
+                        tools:src="@drawable/ic_account_circle_black_24dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:padding="3dp"
+                        android:textSize="12sp"
+                        tools:text="zerodudex333"/>
+
+                </LinearLayout>
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_author"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:drawableLeft="@drawable/ic_account_circle_black_24dp"-->
+                    <!--android:drawablePadding="5dp"-->
+                    <!--android:gravity="left|center"-->
+                    <!--android:padding="3dp"-->
+                    <!--android:textSize="12sp"-->
+                    <!--card_view:layout_columnWeight="1"-->
+                    <!--card_view:layout_gravity="fill_horizontal"-->
+                    <!--tools:text="zerodudex333"/>-->
 
                 <TextView
                     android:id="@+id/tv_kudos"

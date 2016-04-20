@@ -34,6 +34,7 @@
                 android:padding="10dp"
                 android:visibility="visible">
 
+                <!--#scenetransition-->
                 <ImageView
                     android:id="@+id/iv_author_avatar"
                     android:layout_width="48dp"
@@ -42,6 +43,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="10dp"
+                    android:transitionName="SCENE_TRANSITION_DETAIL"
                     tools:src="@drawable/ic_account_circle_black_24dp"/>
 
                 <android.support.v7.widget.GridLayout
@@ -102,8 +104,10 @@
                         tools:text="200 Views"/>
                 </android.support.v7.widget.GridLayout>
 
+                <!--#scenetransition-->
                 <TextView
                     android:id="@+id/tv_subject"
+                    android:transitionName="SCENE_TRANSITION_DETAIL_SUBJECT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/gl_blog_item"

@@ -2,8 +2,6 @@ package com.sasi.giffgaffplay.ggblogs;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,12 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.sasi.giffgaffplay.R;
 import com.sasi.giffgaffplay.data.BlogContract;
 
@@ -29,7 +26,7 @@ import java.util.Locale;
 /**
  * Created by sasikumarlakshmanan on 13/04/16.
  */
-public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHolder> {
+public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.MyViewHolder> {
 
     private static final String TAG = "BlogsAdapter";
     private static Context mContext;
@@ -85,7 +82,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
     int colorTintRes;
 
     public static interface HandleClickInterface {
-        void onClick(int blog_id);
+        void onClick(int blog_id, MyViewHolder vh);
     }
 
     public BlogsAdapter(Context context, Cursor cursor, View emptyView, HandleClickInterface handleClickInterface) {
@@ -98,35 +95,35 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
 
     /**
-     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
+     * Called when RecyclerView needs a new {@link MyViewHolder} of the given type to represent
      * an item.
      * <p/>
-     * This new ViewHolder should be constructed with a new View that can represent the items
+     * This new MyViewHolder should be constructed with a new View that can represent the items
      * of the given type. You can either create a new View manually or inflate it from an XML
      * layout file.
      * <p/>
-     * The new ViewHolder will be used to display items of the adapter using
-     * {@link #//onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display
+     * The new MyViewHolder will be used to display items of the adapter using
+     * {@link #//onBindViewHolder(MyViewHolder, int, List)}. Since it will be re-used to display
      * different items in the data set, it is a good idea to cache references to sub views of
      * the View to avoid unnecessary {@link View#findViewById(int)} calls.
      *
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
      *                 an adapter position.
      * @param viewType The view type of the new View.
-     * @return A new ViewHolder that holds a View of the given view type.
+     * @return A new MyViewHolder that holds a View of the given view type.
      * @see #getItemViewType(int)
-     * @see #//onBindViewHolder(ViewHolder, int)
+     * @see #//onBindViewHolder(MyViewHolder, int)
      */
     @Override
-    public BlogsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.blog_item_card_view, parent, false);
-        ViewHolder vh = new ViewHolder(itemView);
+        MyViewHolder vh = new MyViewHolder(itemView);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(final BlogsAdapter.ViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(final MyViewHolder viewHolder, Cursor cursor) {
 
         int blog_id = cursor.getInt(cursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_BLOG_ID));
         String label = cursor.getString(cursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_LABEL));
@@ -159,18 +156,25 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
 
         viewHolder.tv_author.setText(author);
 
+//        if (temp_blog_avatar) {
+//            Glide.with(mContext).load(cursor.getString(cursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR_URL)))
+//                    .asBitmap()
+//                    .into(new SimpleTarget<Bitmap>(48, 48) {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+//                            viewHolder.tv_author.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mContext.getResources(), resource), null, null, null);
+//                        }
+//                    });
+//        } else {
+//            viewHolder.tv_author.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources()
+//                    .getDrawable(R.drawable.ic_account_circle_black_24dp), null, null, null);
+//        }
+
         if (temp_blog_avatar) {
             Glide.with(mContext).load(cursor.getString(cursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR_URL)))
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>(48, 48) {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                            viewHolder.tv_author.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(mContext.getResources(), resource), null, null, null);
-                        }
-                    });
+                    .into(viewHolder.iv_author_avatar);
         } else {
-            viewHolder.tv_author.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources()
-                    .getDrawable(R.drawable.ic_account_circle_black_24dp), null, null, null);
+            viewHolder.iv_author_avatar.setImageResource(R.drawable.ic_account_circle_black_24dp);
         }
 
         if (temp_color_mode) {
@@ -224,7 +228,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
         return super.getItemCount();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final LinearLayout ll_parent_card_view;
         public final LinearLayout ll_card_view;
@@ -233,13 +237,14 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
         public final TextView tv_subject;
         public final TextView tv_teaser;
         public final TextView tv_views;
+        public final ImageView iv_author_avatar;
         public final TextView tv_author;
         public final TextView tv_kudos;
         public final TextView tv_time;
         public final View vBorderTop;
 //        public final WebView wv_teaser;
 
-        public ViewHolder(View itemView) {
+        public MyViewHolder(View itemView) {
             super(itemView);
             this.ll_parent_card_view = (LinearLayout) itemView.findViewById(R.id.ll_parent_card_view);
             this.ll_card_view = (LinearLayout) itemView.findViewById(R.id.ll_card_view);
@@ -248,6 +253,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
             this.tv_subject = (TextView) itemView.findViewById(R.id.tv_subject);
             this.tv_teaser = (TextView) itemView.findViewById(R.id.tv_teaser);
             this.tv_views = (TextView) itemView.findViewById(R.id.tv_views);
+            this.iv_author_avatar = (ImageView) itemView.findViewById(R.id.iv_author_avatar);
             this.tv_author = (TextView) itemView.findViewById(R.id.tv_author);
             this.tv_kudos = (TextView) itemView.findViewById(R.id.tv_kudos);
             this.tv_time = (TextView) itemView.findViewById(R.id.tv_time);
@@ -272,7 +278,7 @@ public class BlogsAdapter extends CursorRecyclerViewAdapter<BlogsAdapter.ViewHol
             mCursor.moveToPosition(adapterPosition);
             int blog_id = mCursor.getInt(mCursor.getColumnIndex(BlogContract.BlogEntry.COLUMN_BLOG_ID));
 
-            mHandleClickInterface.onClick(blog_id);
+            mHandleClickInterface.onClick(blog_id, this);
         }
     }
 
