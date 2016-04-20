@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
@@ -94,6 +95,10 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
             // Initiate the Loader Task (Background task)
             getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
         }
+
+//        #scenetransition
+        // Being here means we are in animation mode
+//        supportPostponeEnterTransition();
     }
 
     @Override
@@ -110,7 +115,9 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
 
             // Handle the Action bar home up button - Custom
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+//                #scenetransition
+                supportFinishAfterTransition();
+//                NavUtils.navigateUpFromSameTask(this);
                 return true;
 
             case R.id.blog_item_kudos:
@@ -223,6 +230,20 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
 
             loadWebView(bodyStr);
         }
+
+//        #scenetransition
+//        AppCompatActivity activity = (AppCompatActivity) BlogsItemActivity.this;
+//        Toolbar toolbarView = (Toolbar) activity.findViewById(R.id.toolbar);
+//
+//        activity.supportStartPostponedEnterTransition();
+//
+//        if (null != toolbarView) {
+//            activity.setSupportActionBar(toolbarView);
+//
+//            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+//            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
+//
     }
 
     /**

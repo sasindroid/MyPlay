@@ -8,9 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,13 +55,22 @@ public class BlogsActivity extends AppCompatActivity implements LoaderManager.Lo
         // Create the adapter.
         mBlogsCursorAdapter = new BlogsAdapter(this, null, emptyView, new BlogsAdapter.HandleClickInterface() {
             @Override
-            public void onClick(int blog_id) {
+            public void onClick(int blog_id, BlogsAdapter.MyViewHolder vh) {
                 Log.d(TAG, "BLOG ID: " + blog_id);
 
                 Intent blogItemIntent = new Intent(BlogsActivity.this, BlogsItemActivity.class);
                 blogItemIntent.putExtra("BLOG_ID", blog_id);
 
-                startActivity(blogItemIntent);
+//                #scenetransition
+                // Multiple
+                Pair<View, String> pair1 = new Pair<View, String>(vh.iv_author_avatar, "SCENE_TRANSITION_DETAIL");
+                Pair<View, String> pair2 = new Pair<View, String>(vh.tv_subject, "SCENE_TRANSITION_DETAIL_SUBJECT");
+
+                // Make a scene Transition Animation
+                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(BlogsActivity.this,
+                        pair1, pair2);
+
+                ActivityCompat.startActivity(BlogsActivity.this, blogItemIntent, activityOptionsCompat.toBundle());
             }
         });
 
