@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -51,6 +54,10 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     private boolean temp_blog_avatar = true;
     private boolean temp_color_mode = false;
 
+    FloatingActionButton fab;
+    Toolbar toolbar;
+    ActionBar actionBar;
+
     public void tempSetBool() {
         temp_blog_avatar = BlogsActivity.getMyBoolVal("BLOG_AVATAR", this);
         temp_color_mode = BlogsActivity.getMyBoolVal("BLOG_COLOR_MODE", this);
@@ -61,11 +68,11 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blogs_item_new);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -79,6 +86,7 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         setScreenMetrics();
         tempSetBool();
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         wv_body = (WebView) findViewById(R.id.wv_body);
         wv_body.getSettings().setJavaScriptEnabled(true);
         wv_body.getSettings().setBuiltInZoomControls(true);
@@ -96,6 +104,26 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
             getSupportLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
         }
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (isConnectedToInternet(view.getContext())) {
+
+                    Snackbar.make(view, "Kudos given!", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                } else {
+                    Snackbar snackBar = Snackbar.make(view, "No Internet Connection available.", Snackbar.LENGTH_SHORT);
+
+                    View snackBarView = snackBar.getView();
+                    snackBarView.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.red_material_500));
+
+                    snackBar.show();
+                }
+            }
+        });
+
+
 //        #scenetransition
         // Being here means we are in animation mode
 //        supportPostponeEnterTransition();
@@ -104,7 +132,7 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_blog, menu);
+        getMenuInflater().inflate(R.menu.menu_blog_item, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -159,14 +187,14 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
      * transactions while in this call, since it can happen after an
      * activity's state is saved.  See {@link //FragmentManager#beginTransaction()
      * FragmentManager.openTransaction()} for further discussion on this.
-     * <p/>
+     * <p>
      * <p>This function is guaranteed to be called prior to the release of
      * the last data that was supplied for this Loader.  At this point
      * you should remove all use of the old data (since it will be released
      * soon), but should not do your own release of the data since its Loader
      * owns it and will take care of that.  The Loader will take care of
      * management of its data so you don't have to.  In particular:
-     * <p/>
+     * <p>
      * <ul>
      * <li> <p>The Loader will monitor for changes to the data, and report
      * them to you through new calls here.  You should not monitor the
@@ -198,6 +226,7 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         if (data != null && data.moveToFirst()) {
 
             String bodyStr = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_BODY));
+            String label = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_LABEL));
             int views = data.getInt(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_VIEWS));
             String author = data.getString(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_AUTHOR));
             int kudos = data.getInt(data.getColumnIndex(BlogContract.BlogEntry.COLUMN_KUDOS));
@@ -210,6 +239,15 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
             TextView tv_time = (TextView) findViewById(R.id.tv_time);
             ImageView iv_author_avatar = (ImageView) findViewById(R.id.iv_author_avatar);
             TextView tv_subject = (TextView) findViewById(R.id.tv_subject);
+
+
+            label = label.replace("-", " ").toUpperCase();
+
+            Log.d(TAG, "TITLE: " + label);
+
+            if(actionBar != null) {
+                actionBar.setTitle(label);
+            }
 
             // Disable scrolling using ScrollView, instead use the WebView.
             NestedScrollView detail_container = (NestedScrollView) findViewById(R.id.detail_container);
@@ -393,6 +431,15 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
         }
 
         return time;
+    }
+
+    public static boolean isConnectedToInternet(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+//        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
 }

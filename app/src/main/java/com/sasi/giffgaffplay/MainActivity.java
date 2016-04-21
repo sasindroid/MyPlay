@@ -84,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, BlogsActivity.class));
                         break;
 
+                    case 12:
+                        startActivity(new Intent(MainActivity.this, FullscreenActivity.class));
+                        break;
+
+                    case 13:
+                        startActivity(new Intent(MainActivity.this, ScrollingActivity2.class));
+                        break;
+
                     default:
                         break;
                 }
@@ -143,8 +151,12 @@ public class MainActivity extends AppCompatActivity {
         itemsList.add(row12);
 
         RowItems row13 = new RowItems();
-        row13.setTitle("Next row13");
+        row13.setTitle("Full Screen Activity");
         itemsList.add(row13);
+
+        RowItems row14 = new RowItems();
+        row13.setTitle("Scroll Screen Activity");
+        itemsList.add(row14);
 
         return itemsList;
     }
