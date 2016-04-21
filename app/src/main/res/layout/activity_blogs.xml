@@ -10,9 +10,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_blogs"
         android:scrollbars="vertical"
-        android:background="#F5F5F5"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <!--android:background="#E0E0E0"-->
 
     <!-- empty list -->
     <TextView

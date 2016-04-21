@@ -4,13 +4,11 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="#E0E0E0"
               android:paddingBottom="5dp"
               android:paddingLeft="10dp"
               android:paddingRight="10dp"
-              android:paddingTop="5dp"
-    >
-    <!-- A CardView that contains a TextView -->
+              android:paddingTop="5dp">
+
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -18,13 +16,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         card_view:cardBackgroundColor="#FFFFFF"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
         >
+        <!--android:foreground="?android:attr/selectableItemBackground"-->
         <!--card_view:cardCornerRadius="4dp"-->
 
         <RelativeLayout
             android:id="@+id/rl_card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp">
 
             <LinearLayout
                 android:id="@+id/ll_card_view"
@@ -57,14 +60,15 @@
                     android:layout_margin="10dp"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:transitionName="SCENE_TRANSITION_DETAIL_SUBJECT"
                     tools:text="The Latest Apps and Games - March 2016"
                     />
 
                 <!--<WebView-->
-                    <!--android:id="@+id/wv_teaser"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:visibility="gone"></WebView>-->
+                <!--android:id="@+id/wv_teaser"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:visibility="gone"></WebView>-->
 
                 <TextView
                     android:id="@+id/tv_teaser"
@@ -96,18 +100,46 @@
                 card_view:columnCount="2"
                 >
 
-                <TextView
-                    android:id="@+id/tv_author"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_account_circle_black_24dp"
-                    android:drawablePadding="5dp"
-                    android:gravity="left|center"
-                    android:padding="3dp"
-                    android:textSize="12sp"
+                    android:orientation="horizontal"
                     card_view:layout_columnWeight="1"
                     card_view:layout_gravity="fill_horizontal"
-                    tools:text="zerodudex333"/>
+                    >
+                    <ImageView
+                        android:id="@+id/iv_author_avatar"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:padding="3dp"
+                        android:layout_gravity="center"
+                        android:transitionName="SCENE_TRANSITION_DETAIL"
+                        tools:src="@drawable/ic_account_circle_black_24dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:padding="3dp"
+                        android:textSize="12sp"
+                        tools:text="zerodudex333"/>
+
+                </LinearLayout>
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_author"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:drawableLeft="@drawable/ic_account_circle_black_24dp"-->
+                    <!--android:drawablePadding="5dp"-->
+                    <!--android:gravity="left|center"-->
+                    <!--android:padding="3dp"-->
+                    <!--android:textSize="12sp"-->
+                    <!--card_view:layout_columnWeight="1"-->
+                    <!--card_view:layout_gravity="fill_horizontal"-->
+                    <!--tools:text="zerodudex333"/>-->
 
                 <TextView
                     android:id="@+id/tv_kudos"
@@ -141,8 +173,6 @@
                     card_view:layout_columnWeight="1"
                     card_view:layout_gravity="fill_horizontal"
                     tools:text="200 Views"/>
-
-
             </android.support.v7.widget.GridLayout>
         </RelativeLayout>
 

@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/blog_item_kudos"
+        android:orderInCategory="100"
+        android:title="Revoke my Kudos"
+        app:showAsAction="never"/>
+</menu>

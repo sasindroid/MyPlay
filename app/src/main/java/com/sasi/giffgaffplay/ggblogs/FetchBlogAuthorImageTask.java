@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.sasi.giffgaffplay.data.BlogContentProvider;
 import com.sasi.giffgaffplay.data.BlogContract;
 
 import org.json.JSONObject;
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by sasikumarlakshmanan on 13/04/16.
@@ -28,6 +30,7 @@ public class FetchBlogAuthorImageTask extends AsyncTask<String, Void, Void> {
     private final Context mContext;
     private ArrayList<Integer> mBlogItemArrayList = null;
     ArrayList<String> mAuthorArrayList = null;
+    ArrayList<ContentValues> valuesArrayList = new ArrayList<>();
 
     public FetchBlogAuthorImageTask(Context context, ArrayList<Integer> blogItemArrayList, ArrayList<String> authorArrayList) {
         mContext = context;
@@ -62,7 +65,8 @@ public class FetchBlogAuthorImageTask extends AsyncTask<String, Void, Void> {
                 String jsonStr = connectAndGetData(author_id);
 
                 if (jsonStr != null) {
-                    updateBlogAuthorUrl(jsonStr, blog_id);
+//                    updateBlogAuthorUrl(jsonStr, blog_id);
+                    buildBlogUrls(jsonStr, blog_id);
                 }
             }
         }
@@ -70,6 +74,17 @@ public class FetchBlogAuthorImageTask extends AsyncTask<String, Void, Void> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+
+        if(valuesArrayList != null && valuesArrayList.size() > 0) {
+
+            // Apply the batch update now.
+            int updatedCount = BlogContentProvider.bulkUpdateAuthorURL(mContext, valuesArrayList.toArray(new ContentValues[valuesArrayList.size()]));
+
+            Log.d(TAG, "BATCH UPDATES (AUTHOR URL): " + updatedCount);
+        }
+    }
 
     private String connectAndGetData(String author_id) {
 
@@ -143,6 +158,20 @@ public class FetchBlogAuthorImageTask extends AsyncTask<String, Void, Void> {
 
             mContext.getContentResolver().update(BlogContract.BlogEntry.CONTENT_URI, cv,
                     BlogContract.BlogEntry.COLUMN_BLOG_ID + " = " + blog_id, null);
+
+        }
+    }
+
+    private void buildBlogUrls(String jsonStr, int blog_id) {
+
+        String authorURL = parseData(jsonStr);
+
+        if (authorURL != null) {
+            ContentValues cv = new ContentValues();
+            cv.put(BlogContract.BlogEntry.COLUMN_AUTHOR_URL, authorURL);
+            cv.put(BlogContract.BlogEntry.COLUMN_BLOG_ID, blog_id);
+
+            valuesArrayList.add(cv);
         }
     }
 
