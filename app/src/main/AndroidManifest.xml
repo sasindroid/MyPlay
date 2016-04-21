@@ -84,7 +84,8 @@
             <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".ggblogs.HTMLTextActivity"
+        <activity
+            android:name=".ggblogs.HTMLTextActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
 
@@ -104,8 +105,8 @@
         <activity
             android:name=".ggblogs.BlogsItemActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="Blog Detail"
             android:hardwareAccelerated="true"
+            android:label="Blog Detail"
             android:parentActivityName=".ggblogs.BlogsActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -114,10 +115,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ggblogs.BlogsActivity"/>
         </activity>
-
         <activity
             android:name=".ggblogs.SettingsActivity"
             android:label="@string/title_activity_settings">
+        </activity>
+        <activity
+            android:name=".FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme">
+        </activity>
+        <activity
+            android:name=".ScrollingActivity2"
+            android:label="@string/title_activity_scrolling2"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

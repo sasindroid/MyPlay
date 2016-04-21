@@ -15,6 +15,7 @@
 
     <color name="black_overlay">#66000000</color>
 
+    <color name="red_material_500">#F44336</color>
 
     <!--Blogs label color-->
     <color name="blog_label_default">#00796B</color>
