@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 13:
-                        startActivity(new Intent(MainActivity.this, ScrollingActivity2.class));
+                        startActivity(new Intent(MainActivity.this, ScrollingActivity3.class));
                         break;
 
                     default:
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         itemsList.add(row13);
 
         RowItems row14 = new RowItems();
-        row13.setTitle("Scroll Screen Activity");
+        row14.setTitle("Google+ like Animation");
         itemsList.add(row14);
 
         return itemsList;

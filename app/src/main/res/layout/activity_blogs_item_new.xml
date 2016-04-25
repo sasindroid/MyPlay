@@ -107,15 +107,15 @@
                 <!--#scenetransition-->
                 <TextView
                     android:id="@+id/tv_subject"
-                    android:transitionName="SCENE_TRANSITION_DETAIL_SUBJECT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/gl_blog_item"
+                    android:layout_centerHorizontal="true"
                     android:layout_margin="10dp"
+                    android:gravity="center"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_centerHorizontal="true"
+                    android:transitionName="SCENE_TRANSITION_DETAIL_SUBJECT"
                     tools:text="The Latest Apps and Games - March 2016"
                     />
 
@@ -131,31 +131,31 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/detail_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <WebView
-            android:id="@+id/wv_body"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:scrollbarStyle="outsideOverlay"/>
-    </android.support.v4.widget.NestedScrollView>
-
-    <!--Getting the Webview out of the NestedScrollView created issues with -->
-    <!--collapsing the Toolbar.-->
+    <!--<android.support.v4.widget.NestedScrollView-->
+    <!--android:id="@+id/detail_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
     <!--<WebView-->
     <!--android:id="@+id/wv_body"-->
     <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-    <!--android:scrollbarStyle="outsideOverlay"-->
+    <!--android:layout_height="match_parent"-->
     <!--android:padding="10dp"-->
-    <!--/>-->
+    <!--android:scrollbarStyle="outsideOverlay"/>-->
+    <!--</android.support.v4.widget.NestedScrollView>-->
+
+    <!--Getting the Webview out of the NestedScrollView created issues with -->
+    <!--collapsing the Toolbar.-->
+
+    <com.sasi.giffgaffplay.ggblogs.MyWebView
+        android:id="@+id/wv_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -163,7 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_thumb_up_black_48dp"
-        app:layout_anchor="@id/detail_container"
+        app:layout_anchor="@id/wv_body"
         app:layout_anchorGravity="bottom|end"/>
 
 

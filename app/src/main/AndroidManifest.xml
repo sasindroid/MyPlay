@@ -116,6 +116,19 @@
                 android:value=".ggblogs.BlogsActivity"/>
         </activity>
         <activity
+            android:name=".ggblogs.BlogsItemActivity2"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:label="Blog Detail"
+            android:parentActivityName=".ggblogs.BlogsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ggblogs.BlogsActivity"/>
+        </activity>
+        <activity
             android:name=".ggblogs.SettingsActivity"
             android:label="@string/title_activity_settings">
         </activity>
@@ -128,6 +141,11 @@
         <activity
             android:name=".ScrollingActivity2"
             android:label="@string/title_activity_scrolling2"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ScrollingActivity3"
+            android:label="@string/title_activity_scrolling3"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

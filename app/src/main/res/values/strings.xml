@@ -169,5 +169,6 @@
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="title_activity_scrolling2">ScrollingActivity2</string>
+    <string name="title_activity_scrolling3">ScrollingActivity3</string>
 
 </resources>

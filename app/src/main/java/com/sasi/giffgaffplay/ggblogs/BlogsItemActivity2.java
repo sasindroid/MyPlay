@@ -42,7 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class BlogsItemActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BlogsItemActivity2 extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "AppCompatActivity";
     MyWebView wv_body;
@@ -67,7 +67,7 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blogs_item_new);
+        setContentView(R.layout.activity_blogs_item_new2);
 
         toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -131,6 +131,23 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
                 Log.d(TAG, "WEBVIEW SCROLL: " + scrollX + "-" + scrollY + "-" + oldScrollX + "-" + oldScrollY);
             }
         });
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            wv_body.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//                @Override
+//                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                    Log.d(TAG, "************* We Scrolled MMMMMMMMM etc...");
+//                }
+//            });
+//        }
+//
+//        wv_body.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback(){
+//            public void onScroll(int l, int t){
+//                //Do stuff
+//                Log.d(TAG, "************* We Scrolled etc...");
+//            }
+//        });
+
 
 //        #scenetransition
         // Being here means we are in animation mode
@@ -372,7 +389,7 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
 
             mContentView = (CoordinatorLayout) findViewById(R.id.clParentView);
             mContentView.setVisibility(View.GONE);
-            mCustomViewContainer = new FrameLayout(BlogsItemActivity.this);
+            mCustomViewContainer = new FrameLayout(BlogsItemActivity2.this);
             mCustomViewContainer.setLayoutParams(LayoutParameters);
             mCustomViewContainer.setBackgroundResource(android.R.color.black);
             view.setLayoutParams(LayoutParameters);
@@ -380,7 +397,7 @@ public class BlogsItemActivity extends AppCompatActivity implements LoaderManage
             mCustomView = view;
             mCustomViewCallback = callback;
             mCustomViewContainer.setVisibility(View.VISIBLE);
-            BlogsItemActivity.this.setContentView(mCustomViewContainer);
+            BlogsItemActivity2.this.setContentView(mCustomViewContainer);
         }
 
         @Override

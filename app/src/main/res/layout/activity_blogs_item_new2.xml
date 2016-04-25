@@ -1,0 +1,150 @@
+<LinearLayout
+    android:id="@+id/clParentView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.sasi.giffgaffplay.ggblogs.BlogsItemActivity"
+    tools:ignore="MergeRootFrame">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:visibility="visible">
+
+        <!--#scenetransition-->
+        <ImageView
+            android:id="@+id/iv_author_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:transitionName="SCENE_TRANSITION_DETAIL"
+            tools:src="@drawable/ic_account_circle_black_24dp"/>
+
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/gl_blog_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_author_avatar"
+            app:columnCount="2"
+            >
+
+            <TextView
+                android:id="@+id/tv_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:gravity="left|center"
+                android:padding="3dp"
+                android:textSize="14sp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal"
+                tools:text="zerodudex333"/>
+
+            <TextView
+                android:id="@+id/tv_kudos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="3dp"
+                android:textSize="14sp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal"
+                tools:text="13 Kudos"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="3dp"
+                android:textSize="14sp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal"
+                tools:text="04/04/2016 12:21"/>
+
+            <TextView
+                android:id="@+id/tv_views"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="3dp"
+                android:textSize="14sp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal"
+                tools:text="200 Views"/>
+        </android.support.v7.widget.GridLayout>
+
+        <!--#scenetransition-->
+        <TextView
+            android:id="@+id/tv_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gl_blog_item"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:transitionName="SCENE_TRANSITION_DETAIL_SUBJECT"
+            tools:text="The Latest Apps and Games - March 2016"
+            />
+
+    </RelativeLayout>
+
+
+    <!--<android.support.v4.widget.NestedScrollView-->
+    <!--android:id="@+id/detail_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+    <!--<com.sasi.giffgaffplay.ggblogs.ObservableWebView-->
+    <!--android:id="@+id/wv_body"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:padding="10dp"-->
+    <!--android:scrollbarStyle="outsideOverlay"/>-->
+    <!--</android.support.v4.widget.NestedScrollView>-->
+
+    <!--Getting the Webview out of the NestedScrollView created issues with -->
+    <!--collapsing the Toolbar.-->
+
+    <com.sasi.giffgaffplay.ggblogs.MyWebView
+        android:id="@+id/wv_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_thumb_up_black_48dp"
+        app:layout_anchor="@id/wv_body"
+        app:layout_anchorGravity="bottom|end"/>
+
+
+</LinearLayout>
